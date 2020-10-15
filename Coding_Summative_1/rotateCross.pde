@@ -26,7 +26,7 @@ class rotateCross
       posY=posY+random(3,6);
       pushMatrix();
       translate(initialX, posY); 
-      rotate(millis()/random(300.0,600.0));
+      rotate(millis()/600.0);
       image(crossy, 0, 0);
       popMatrix();
       if (posY>800)

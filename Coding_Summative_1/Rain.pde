@@ -1,19 +1,36 @@
-class Rain
+class Rain 
 {
-float x=random(0,800);
-float y=random(-200,0);
-float fallSpeed=2;
-float wind=map(0,800,mouseX,1,5);
+  float x;
+  float y; 
+  float z; 
+  float longness;
+  float speed;
 
-void draw()
-{
-  for (int i=0; i<300;i++)
+
+ 
+  Rain() 
   {
-  stroke(197, 226, 247);
-  strokeWeight(3);
-  line(x,y,x+wind,y);
-    y+=fallSpeed;
-  x+=wind;
+    x  = random(width); 
+    y  = random(-1020, -100); 
+    longness=10;
+    speed  = 3;
+
   }
-}
+
+  void down() 
+  { 
+    y = y + speed; 
+
+    if (y > height) 
+    { 
+      y = random(-200, -100);
+    }
+  }
+
+  void create() 
+  {
+    strokeWeight(2); 
+    stroke(197, 226, 247);
+    line(x,y,x, y+longness); 
+  }
 }

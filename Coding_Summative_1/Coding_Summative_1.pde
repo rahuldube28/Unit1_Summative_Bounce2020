@@ -1,7 +1,12 @@
-rotateCross rotateCross=new rotateCross();
-Rain Rain=new Rain();
-int scene=2;
+import processing.sound.*;//sound library
+rotateCross rotateCross=new rotateCross();//Cross class
+Rain[] rains = new Rain[1000];//Rain class
+int scene=0;
 PImage Rocket;
+PImage Umbrella;
+boolean deploy;
+SoundFile sound;
+int x;
 PImage Taxi;
 PImage rTaxi;
 PImage Street;
@@ -17,23 +22,25 @@ float yObs;
 float delay = 0.05;
 float distance;
 boolean hard;
-float x=random(0, 800);
-float y=random(-300, -100);
-float fallSpeed=0.5;
-float wind=3;
+PImage BikeBoy;
 void setup()
 {
   size(800, 800);
   rectMode(CENTER);
-  //for (int i=0; i<Rain.length; i++)
-  //{
-  //Rain[i].draw();
-  //}
+  for (int i = 0; i < 1000; i++) 
+  { 
+    rains[i] = new Rain();
+  }
   imageMode(CENTER);
+  //images
   Rocket=loadImage("Rocket 2.png");
   Taxi=loadImage("Taxi.png");
-  Street=loadImage("10DowningStreet.jpg");
   rTaxi=loadImage("Taxi copy.png");
+  BikeBoy=loadImage("Boy on Bike.png");
+  Umbrella=loadImage("Deploy.png");
+  //loading sound files
+  sound = new SoundFile(this, "rain-03.wav");
+  sound.loop();
 }
 
 
@@ -41,7 +48,7 @@ void draw()
 {
   if (scene==0)
   {
-
+    sound.amp(0);
     rocketX=mouseX;
     rocketY=mouseY;
 
@@ -96,17 +103,49 @@ void draw()
     }
     image(Rocket, mouseX, mouseY);
     text("Click and hold while playing if you want a challenge", 400, 400);
-    text("If you see red screen, you died. Press 0 to try again and press 2 to advance. ", 400, 380);
-    if (scene==1)
-    {
-      background(255, 0, 0);
-    }
+    text("If you see red screen, you died. Press 0 to try again and press 2 to advance. ", 350, 380);
   }
+  
+  if (scene==1)
+  {
+    sound.amp(0);
+    background(255, 0, 0);
+  }
+  
   if (scene==2)
   {
-    image(Street, 400, 400);
-    image(Taxi,200,740);
-    image(rTaxi,600,740);
+    background(1);
+    sound.amp(0.1);
+    //Rain Array
+    for (int i = 0; i < 1000; i++) 
+    {
+      rains[i].down();
+      rains[i].create();
+    }
+    //sidewalk
+    stroke(1);
+    fill(204, 207, 209);
+    rect(400, 775, 820, 50);
+    //BikeBoy Image
+    image(BikeBoy, 48.5+x, 750);
+    if (x>width)
+    {
+      scene=3;
+    }
+    //deploy Umbrella
+    if (deploy)
+    {
+      image(Umbrella, 65+x, 700);
+    }
+    fill(255, 255, 255);
+
+    text("It's raining! Press 'u' to deploy your umbrella and 'd' to move to the right.", 100, 750);
+  }
+  if (scene==3)
+  {
+    background(1);
+    sound.stop();
+    text("I hope you enjoyed it!",400,400);
   }
 }
 
@@ -128,5 +167,13 @@ void keyPressed()
   if (key=='2')
   {
     scene=2;
+  }
+  if (key=='d')
+  {
+    x+=2;
+  }
+  if (key=='u')
+  {
+    deploy=true;
   }
 }
